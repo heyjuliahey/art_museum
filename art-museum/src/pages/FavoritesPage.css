@@ -1,0 +1,44 @@
+.favorites-list {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    padding: 60px;
+    text-align: center;
+}
+
+.favorites-text {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+    margin-top: 80px;
+}
+
+.favorites-text h1 {
+    font-size: 50px;
+}
+
+.favorites-text h1 span {
+    color: orange;
+}
+
+.favorites-text div p {
+    color: orange;
+    font-weight: 400;
+}
+
+.favorites-text div span {
+    font-size: 20px;
+}
+
+.favorites-container {
+    min-height: 500px;
+}
+
+.footer {
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  text-align: center;
+  height: 60px;
+}
