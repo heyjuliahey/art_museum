@@ -1,7 +1,7 @@
 import React from "react";
 import "./imageItem.scss";
 import { Link } from "react-router-dom";
-import { addToFavorites } from "../../utils/SessionStorage";
+import { addToFavorites } from "../../utils/sessionStorage";
 
 interface ImageItemProps {
   id: number;

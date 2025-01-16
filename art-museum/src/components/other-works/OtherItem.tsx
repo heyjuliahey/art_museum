@@ -1,6 +1,6 @@
 import React from "react";
 import "./OtherWorks.scss";
-import { addToFavorites } from "../../utils/SessionStorage";
+import { addToFavorites } from "../../utils/sessionStorage";
 
 interface OtherItemProps {
   id: number;

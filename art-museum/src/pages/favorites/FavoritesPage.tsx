@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
+import "./FavoritesPage.scss";
 import OtherItem from "../../components/other-works/OtherItem";
 import Navbar from "../../components/navbar/Navbar";
 import Footer from "../../components/footer/Footer";
+import Loader from "../../components/loader/Loader";
 import { FavoriteDetails } from "../../types/types";
 import { fetchFavoriteArtworkDetails } from "../../api/api";
-import "./FavoritesPage.scss";
 
 const FavoritesPage: React.FC = () => {
   const [favorites, setFavorites] = useState<FavoriteDetails[]>([]);
@@ -16,7 +17,7 @@ const FavoritesPage: React.FC = () => {
         sessionStorage.getItem("favorites") || "[]",
       );
 
-      const artworkDetails: FavoriteDetails[] = await Promise.all(
+      const artworkDetails: (FavoriteDetails | null)[] = await Promise.all(
         favoriteArtworkIds.map(async (id) => {
           const details = await fetchFavoriteArtworkDetails(id);
           return details ? details : null;
@@ -45,6 +46,14 @@ const FavoritesPage: React.FC = () => {
       JSON.stringify(updatedFavoritesFromStorage),
     );
   };
+
+  if (loading) {
+    return (
+      <>
+        <Loader />
+      </>
+    );
+  }
 
   return (
     <>
