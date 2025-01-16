@@ -1,8 +1,7 @@
 # Museum Of Art
 
 ## Demo
-Check out the live demo of the project: https://heyjuliahey.github.io/art_museum/
-
+Check out the live demo of the project: [https://heyjuliahey.github.io/art_museum/]
 ## Installation
 
 1. Clone the repository
@@ -15,3 +14,4 @@ Check out the live demo of the project: https://heyjuliahey.github.io/art_museum
 ## Usage
 
 To run the project locally use `npm run dev`
+To run tests use `npm test`
