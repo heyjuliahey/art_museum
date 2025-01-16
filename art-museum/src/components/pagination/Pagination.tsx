@@ -43,6 +43,11 @@ const Pagination: React.FC<PaginationProps> = ({
   const endIndex = startIndex + buttonsPerPage;
   const visiblePages = pages.slice(startIndex, endIndex);
 
+  const pageClickHandler = (page: number) => {
+    return () => handleClick(page);
+  };
+  
+
   return (
     <div className="pagination">
       <button
@@ -56,7 +61,7 @@ const Pagination: React.FC<PaginationProps> = ({
         <button
           key={page}
           type="button"
-          onClick={() => handleClick(page)}
+          onClick={pageClickHandler(page)}
           className={page === currentPage ? "active" : ""}
         >
           {page}

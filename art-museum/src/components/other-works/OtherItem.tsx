@@ -5,7 +5,7 @@ import { addToFavorites } from "../../utils/sessionStorage";
 interface OtherItemProps {
   id: number;
   title: string;
-  artist: string;
+  artist_title: string;
   imageId: string;
   onClick?: () => void;
 }
@@ -13,7 +13,7 @@ interface OtherItemProps {
 const OtherItem: React.FC<OtherItemProps> = ({
   id,
   title,
-  artist,
+  artist_title,
   imageId,
   onClick,
 }) => {
@@ -26,17 +26,19 @@ const OtherItem: React.FC<OtherItemProps> = ({
     }
   };
 
+  const imageUrl = `https://www.artic.edu/iiif/2/${imageId}/full/843,/0/default.jpg`;
+
   return (
     <div className="other-card">
       <div className="other-card-image">
         <img
-          src={`https://www.artic.edu/iiif/2/${imageId}/full/843,/0/default.jpg`}
+          src={imageUrl}
           alt={title}
         />
       </div>
       <div className="other-card-info">
         <p className="title">{title}</p>
-        <p className="artist">{artist}</p>
+        <p className="artist">{artist_title}</p>
       </div>
       <button onClick={handleButtonClick} className="add-to-fav-btn">
         <svg

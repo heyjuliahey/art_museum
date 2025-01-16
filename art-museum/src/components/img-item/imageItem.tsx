@@ -17,7 +17,13 @@ const ImageItem: React.FC<ImageItemProps> = ({
   artist,
   imageId,
   date,
-}) => {
+}) => { 
+  const imageUrl = `https://www.artic.edu/iiif/2/${imageId}/full/843,/0/default.jpg`;
+
+  const handleAddToFavorites = () => {
+    addToFavorites(id);
+  };
+
   return (
     <>
       <section className="card-container">
@@ -29,7 +35,7 @@ const ImageItem: React.FC<ImageItemProps> = ({
           >
             <img
               className="card-image"
-              src={`https://www.artic.edu/iiif/2/${imageId}/full/843,/0/default.jpg`}
+              src={imageUrl}
             />
           </Link>
           <section className="card-data">
@@ -38,7 +44,7 @@ const ImageItem: React.FC<ImageItemProps> = ({
               <h3 className="artist-name">{artist}</h3>
             </div>
             <div className="fav-btn-card">
-              <button onClick={()=>addToFavorites(id)} className="add-to-fav-btn">
+              <button onClick={handleAddToFavorites} className="add-to-fav-btn">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   height="24px"
@@ -57,4 +63,4 @@ const ImageItem: React.FC<ImageItemProps> = ({
   );
 };
 
-export default ImageItem;
+export default React.memo(ImageItem);

@@ -24,7 +24,7 @@ interface Favorite {
 interface FavoriteDetails {
   id: number;
   title: string;
-  artist: string;
+  artist_title: string;
   image_id: string;
 }
 

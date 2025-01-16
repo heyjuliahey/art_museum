@@ -16,6 +16,8 @@ const InfoPage: React.FC = () => {
   const state = location.state as InfoState;
   const { id, title, artist, date } = state;
 
+  const handleAddToFavorites = (id: number) => () => addToFavorites(id);
+
   return (
     <>
       <Navbar />
@@ -25,7 +27,7 @@ const InfoPage: React.FC = () => {
             src={`https://www.artic.edu/iiif/2/${image_id}/full/843,/0/default.jpg`}
             alt={artist_title}
           />
-          <button onClick={()=>addToFavorites(id)} className="info-btn">
+          <button onClick={handleAddToFavorites(id)} className="info-btn">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               height="26px"

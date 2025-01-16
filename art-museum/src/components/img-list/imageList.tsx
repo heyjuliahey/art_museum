@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from "react";
 import ImageItem from "../img-item/imageItem";
 import Pagination from "../pagination/Pagination";
-import fetchData from "../../api/api";
 import OtherItem from "../other-works/OtherItem";
+import fetchArtworks from "../../api/api";
 import Loader from "../loader/Loader";
+import Footer from "../footer/Footer";
 import { Artwork } from "../../types/types";
 import { fetchValue } from "../../api/api";
 import { sortArtworks } from "../../utils/sort";
 import { paginate } from "../../utils/pagination";
-import Footer from "../footer/Footer";
 import { ToastContainer } from "react-toastify";
 import "../../../node_modules/react-toastify/dist/ReactToastify.css";
 import "./imageList.scss";
@@ -34,8 +34,8 @@ const ImageList: React.FC = () => {
   }, [input]);
 
   useEffect(() => {
-    const fetchArtworks = async () => {
-      const { artworks: artworksData, pagination } = await fetchData(
+    const fetchArtwork = async () => {
+      const { artworks: artworksData, pagination } = await fetchArtworks(
         currentPage,
         60,
       );
@@ -44,7 +44,7 @@ const ImageList: React.FC = () => {
       setArtworks(artworksData);
       setLoading(false);
     };
-    fetchArtworks();
+    fetchArtwork();
   }, [totalPosts]);
 
   const sortedArts = sortArtworks(arts, sortValue);
@@ -61,7 +61,7 @@ const ImageList: React.FC = () => {
   useEffect(() => {
     const fetchSearchResults = async () => {
       if (debouncedInput.trim() === "") {
-        const { artworks: artworksData } = await fetchData(currentPage, 60);
+        const { artworks: artworksData } = await fetchArtworks(currentPage, 60);
         setArts(artworksData);
         setLoading(false);
       } else {
@@ -74,6 +74,11 @@ const ImageList: React.FC = () => {
   }, [debouncedInput]);
 
   const currentPosts = paginate(sortedArts, currentPage, postsPerPage);
+  
+  const handleInputChange = (event:React.ChangeEvent<HTMLInputElement>) => {
+    handleChange(event.target.value);
+  };
+  
 
   if (loading) {
     return (
@@ -97,7 +102,7 @@ const ImageList: React.FC = () => {
             className="input-main-page"
             type="search"
             placeholder="Search Art, Artist, Work..."
-            onChange={(e) => handleChange(e.target.value)}
+            onChange={handleInputChange}
             value={input}
           />
         </div>
@@ -160,7 +165,7 @@ const ImageList: React.FC = () => {
             key={artwork.id}
             id={artwork.id}
             title={artwork.title}
-            artist={artwork.artist_title}
+            artist_title={artwork.artist_title}
             imageId={artwork.image_id}
           />
         ))}

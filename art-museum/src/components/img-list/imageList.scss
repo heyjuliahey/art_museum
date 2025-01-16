@@ -107,9 +107,12 @@ $input-background-color: 	#DCDCDC;
 }
 
 .not-found {
-  text-align: "center";
-  margin-top: 20px;
-  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 70px;
+  color: $prime-color;
+  font-size: 28px;
 }
 
 @media screen and (max-width: 1400px) {

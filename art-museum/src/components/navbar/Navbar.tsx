@@ -15,11 +15,12 @@ const Navbar: React.FC = () => {
   };
 
   const sidebarRef = useClickOutside(hideSidebar);
+  const sideBarClassName = `sidebar ${sidebarVisible ? "visible" : ""}`;
 
   return (
     <nav>
       <ul
-        className={`sidebar ${sidebarVisible ? "visible" : ""}`}
+        className={sideBarClassName}
         ref={sidebarRef}
       >
         <li onClick={hideSidebar}>

@@ -3,7 +3,7 @@ import { toast } from "react-toastify";
 import { Artwork, ApiResponse, FavoriteDetails } from "../types/types";
 import { getArtworkUrl, getSearchUrl, getArtworkDetailUrl } from "../config/apiConfig";
 
-const fetchData = async (
+const fetchArtworks = async (
   page: number,
   limit: number,
 ): Promise<{ artworks: Artwork[]; pagination: ApiResponse["pagination"] }> => {
@@ -60,6 +60,6 @@ const fetchFavoriteArtworkDetails = async (
   }
 };
 
-export default fetchData;
+export default fetchArtworks;
 export { fetchValue };
 export { fetchFavoriteArtworkDetails };
