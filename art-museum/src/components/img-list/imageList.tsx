@@ -45,7 +45,7 @@ const ImageList: React.FC = () => {
       setLoading(false);
     };
     fetchArtworks();
-  }, []);
+  }, [totalPosts]);
 
   const sortedArts = sortArtworks(arts, sortValue);
 

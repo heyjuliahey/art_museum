@@ -4,7 +4,7 @@ import Navbar from "../../components/navbar/Navbar";
 import Footer from "../../components/footer/Footer";
 import { useLocation, useParams } from "react-router-dom";
 import { InfoState } from "../../types/types";
-import { addToFavorites } from "../../utils/SessionStorage";
+import { addToFavorites } from "../../utils/sessionStorage";
 
 const InfoPage: React.FC = () => {
   const { artist_title, image_id } = useParams<{

@@ -24,13 +24,11 @@ const Pagination: React.FC<PaginationProps> = ({
   }
 
   const handleClick = (page: number) => {
-    console.log(`Setting currentPage to ${page}`);
     setCurrentPage(page);
   };
 
   const handleNext = () => {
     if (currentButtonSet < Math.ceil(totalPages / buttonsPerPage) - 1) {
-      console.log("Next button clicked");
       setCurrentButtonSet(currentButtonSet + 1);
     }
   };
