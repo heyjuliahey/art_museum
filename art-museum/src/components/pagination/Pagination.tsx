@@ -1,18 +1,19 @@
 import React, { useState } from "react";
-import "./Pagination.css";
+import "./Pagination.scss";
 
 interface PaginationProps {
   totalPosts: number;
   postsPerPage: number;
+  currentPage: number;
   setCurrentPage: (page: number) => void;
 }
 
 const Pagination: React.FC<PaginationProps> = ({
   totalPosts,
   postsPerPage,
+  currentPage,
   setCurrentPage,
 }) => {
-  const [currentPage, setCurrentPageState] = useState(1);
   const [currentButtonSet, setCurrentButtonSet] = useState(0);
   const totalPages = Math.ceil(totalPosts / postsPerPage);
   const buttonsPerPage = 4;
@@ -23,12 +24,13 @@ const Pagination: React.FC<PaginationProps> = ({
   }
 
   const handleClick = (page: number) => {
+    console.log(`Setting currentPage to ${page}`);
     setCurrentPage(page);
-    setCurrentPageState(page);
   };
 
   const handleNext = () => {
     if (currentButtonSet < Math.ceil(totalPages / buttonsPerPage) - 1) {
+      console.log("Next button clicked");
       setCurrentButtonSet(currentButtonSet + 1);
     }
   };
@@ -55,6 +57,7 @@ const Pagination: React.FC<PaginationProps> = ({
       {visiblePages.map((page) => (
         <button
           key={page}
+          type="button"
           onClick={() => handleClick(page)}
           className={page === currentPage ? "active" : ""}
         >

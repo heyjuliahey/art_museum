@@ -1,9 +1,7 @@
-import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react-swc'
-
-const repositoryName = '/art_museum/';
+import { defineConfig } from "vite";
+import react from "@vitejs/plugin-react-swc";
 
 export default defineConfig({
-  base: repositoryName,
+  base: "/art_museum/",
   plugins: [react()],
-})
+});

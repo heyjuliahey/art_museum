@@ -1,41 +1,28 @@
 import React from "react";
-import "./OtherWorks.css";
+import "./OtherWorks.scss";
+import { addToFavorites } from "../../utils/SessionStorage";
 
-interface ImageItemProps {
+interface OtherItemProps {
+  id: number;
   title: string;
   artist: string;
-  date: string;
   imageId: string;
   onClick?: () => void;
 }
 
-const OtherItem: React.FC<ImageItemProps> = ({
+const OtherItem: React.FC<OtherItemProps> = ({
+  id,
   title,
   artist,
   imageId,
   onClick,
 }) => {
-  const addToFavorites = (): void => {
-    const favorites = JSON.parse(sessionStorage.getItem("favorites") || "[]");
-    const newFavorite = { title, artist, imageId };
-    const isAlreadyFavorite = favorites.some(
-      (favorite: { title: string; artist: string; imageId: string }) =>
-        favorite.title === newFavorite.title &&
-        favorite.artist === newFavorite.artist &&
-        favorite.imageId === newFavorite.imageId
-    );
-
-    if (!isAlreadyFavorite) {
-      const updatedFavorites = [...favorites, newFavorite];
-      sessionStorage.setItem("favorites", JSON.stringify(updatedFavorites));
-    }
-  };
 
   const handleButtonClick = () => {
     if (onClick) {
       onClick();
     } else {
-      addToFavorites();
+      addToFavorites(id);
     }
   };
 
@@ -62,6 +49,7 @@ const OtherItem: React.FC<ImageItemProps> = ({
           <path d="M200-120v-640q0-33 23.5-56.5T280-840h400q33 0 56.5 23.5T760-760v640L480-240 200-120Zm80-122 200-86 200 86v-518H280v518Zm0-518h400-400Z" />
         </svg>
       </button>
+     
     </div>
   );
 };

@@ -1,39 +1,28 @@
 import React, { useEffect, useState } from "react";
 import ImageItem from "../img-item/imageItem";
-import "./imageList.css";
-import Pagination from "../Pagination";
-import useAxios from "../../hooks/useAxios";
+import Pagination from "../pagination/Pagination";
+import fetchData from "../../api/api";
 import OtherItem from "../other-works/OtherItem";
-import Loader from "../Loader";
-
-interface Artwork {
-  id: number;
-  title: string;
-  artist_title: string;
-  date_display: string;
-  image_id: string;
-}
+import Loader from "../loader/Loader";
+import { Artwork } from "../../types/types";
+import { fetchValue } from "../../api/api";
+import { sortArtworks } from "../../utils/sort";
+import { paginate } from "../../utils/pagination";
+import Footer from "../footer/Footer";
+import { ToastContainer } from "react-toastify";
+import "../../../node_modules/react-toastify/dist/ReactToastify.css";
+import "./imageList.scss";
 
 const ImageList: React.FC = () => {
   const [artworks, setArtworks] = useState<Artwork[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [currentPage, setCurrentPage] = useState(1);
   const [postsPerPage] = useState(3);
-  const [input, setInput] = useState("");
   const [arts, setArts] = useState<Artwork[]>([]);
-  const [debouncedInput, setDebouncedInput] = useState<string>("");
   const [sortValue, setSortValue] = useState<string>("title");
-
-  useEffect(() => {
-    const fetchArtworks = async () => {
-      const artworksData = await useAxios();
-      setArtworks(artworksData);
-      setLoading(false);
-      setArts(artworksData);
-    };
-
-    fetchArtworks();
-  }, []);
+  const [totalPosts, setTotalPosts] = useState<number>(0);
+  const [input, setInput] = useState<string>("");
+  const [debouncedInput, setDebouncedInput] = useState<string>("");
 
   useEffect(() => {
     const handler = setTimeout(() => {
@@ -45,30 +34,46 @@ const ImageList: React.FC = () => {
   }, [input]);
 
   useEffect(() => {
-    if (debouncedInput === "") {
-      setArts(artworks);
-    } else {
-      setArts(
-        artworks.filter((art) =>
-          art.title.toLowerCase().includes(debouncedInput.toLowerCase())
-        )
+    const fetchArtworks = async () => {
+      const { artworks: artworksData, pagination } = await fetchData(
+        currentPage,
+        60,
       );
-    }
-    setCurrentPage(1);
-  }, [debouncedInput, artworks]);
+      setTotalPosts(pagination.limit);
+      setArts(artworksData);
+      setArtworks(artworksData);
+      setLoading(false);
+    };
+    fetchArtworks();
+  }, []);
 
-  const sortedArts = [...arts].sort((a, b) => {
-    if (sortValue === "title") {
-      return a.title?.localeCompare(b.title);
-    } else if (sortValue === "artist") {
-      return a.artist_title?.localeCompare(b.artist_title);
-    } 
-    return 0;
-  });
+  const sortedArts = sortArtworks(arts, sortValue);
 
   const handleSortChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setSortValue(e.target.value);
   };
+
+  const handleChange = (value: string) => {
+    const validatedValue = value.replace(/[^a-zA-Z\s]/g, "");
+    setInput(validatedValue);
+  };
+
+  useEffect(() => {
+    const fetchSearchResults = async () => {
+      if (debouncedInput.trim() === "") {
+        const { artworks: artworksData } = await fetchData(currentPage, 60);
+        setArts(artworksData);
+        setLoading(false);
+      } else {
+        const searchResults = await fetchValue(debouncedInput);
+        setArts(searchResults);
+        setCurrentPage(1);
+      }
+    };
+    fetchSearchResults();
+  }, [debouncedInput]);
+
+  const currentPosts = paginate(sortedArts, currentPage, postsPerPage);
 
   if (loading) {
     return (
@@ -78,103 +83,89 @@ const ImageList: React.FC = () => {
     );
   }
 
-  const lastPostIndex = currentPage * postsPerPage;
-  const firstPostIndex = lastPostIndex - postsPerPage;
-  const currentPosts = sortedArts.slice(firstPostIndex, lastPostIndex);
-
-  const handleFilter = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setInput(e.target.value);
-  };
-
   return (
     <>
-      <div className="flex-container">
+    <ToastContainer/>
+      <section className="flex-container">
         <h1 className="header-1">
           Let's Find Some <span>Art</span>
           <br /> Here!
         </h1>
+
         <div className="search-container">
           <input
             className="input-main-page"
             type="search"
             placeholder="Search Art, Artist, Work..."
-            onChange={handleFilter}
+            onChange={(e) => handleChange(e.target.value)}
             value={input}
           />
         </div>
-      </div>
+      </section>
 
-      <div className="sort-container">
+      <section className="sort-container">
         <label htmlFor="sort">Sort By:</label>
         <select id="sort" value={sortValue} onChange={handleSortChange}>
           <option value="title">Title</option>
           <option value="artist">Artist</option>
         </select>
-      </div>
+      </section>
 
-      <div className="gallery-text">
+      <section className="gallery-text">
         <span>Topics for you</span>
         <h1>Our special gallery</h1>
-      </div>
+      </section>
 
-      <div className="image-list">
-        {currentPosts.map((artwork) => (
-          <ImageItem
-            key={artwork.id}
-            title={artwork.title}
-            artist={artwork.artist_title}
-            date={artwork.date_display}
-            imageId={artwork.image_id}
-          />
-        ))}
-      </div>
+      <>
+        {
+          currentPosts.length > 0 ? (
+            <div className="image-list">
+              {currentPosts.map((artwork) => (
+                <ImageItem
+                  key={artwork.id}
+                  id={artwork.id}
+                  title={artwork.title}
+                  artist={artwork.artist_title}
+                  date={artwork.date_display}
+                  imageId={artwork.image_id}
+                />
+              ))}
+            </div>
+          ) : (
+            <div className="not-found"
+            >
+              No artworks found.
+            </div>
+          )
+        }
+      </>
 
-      <div className="pagination-container">
+      <section className="pagination-container">
         <Pagination
           totalPosts={arts.length}
           postsPerPage={postsPerPage}
+          currentPage={currentPage}
           setCurrentPage={setCurrentPage}
         />
-      </div>
+      </section>
 
-      <div className="gallery-text">
+      <section className="gallery-text">
         <span>Here some more</span>
         <h2>Other works for you</h2>
-      </div>
+      </section>
 
-      <div className="others">
+      <section className="others">
         {artworks.slice(-9).map((artwork) => (
           <OtherItem
             key={artwork.id}
+            id={artwork.id}
             title={artwork.title}
             artist={artwork.artist_title}
-            date={artwork.date_display}
             imageId={artwork.image_id}
           />
         ))}
-      </div>
-
-      <footer className="footer">
-        <div className="footer-container">
-          <div className="museum-logo">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              height="24px"
-              viewBox="0 -960 960 960"
-              width="24px"
-              fill="#000000"
-            >
-              <path d="M200-280v-280h80v280h-80Zm240 0v-280h80v280h-80ZM80-120v-80h800v80H80Zm600-160v-280h80v280h-80ZM80-640v-80l400-200 400 200v80H80Zm178-80h444-444Zm0 0h444L480-830 258-720Z" />
-            </svg>{" "}
-            <p>
-              Museum of <span>Art</span>
-            </p>
-          </div>
-          <div className="modsen-logo">
-            <h2>Modsen</h2>
-          </div>
-        </div>
-      </footer>
+      </section>
+      <Footer />
     </>
   );
 };

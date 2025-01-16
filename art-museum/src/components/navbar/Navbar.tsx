@@ -1,22 +1,29 @@
-import "./Navbar.css";
 import { Link } from "react-router-dom";
+import { useState } from "react";
+import "./Navbar.scss";
+import useClickOutside from "../../hooks/clickOutside";
 
-const Navbar = () => {
+const Navbar: React.FC = () => {
+  const [sidebarVisible, setSidebarVisible] = useState(false);
+
   const showSidebar = () => {
-    const sidebar = document.querySelector(".sidebar");
-    sidebar?.classList.toggle("visible");
+    setSidebarVisible(true);
   };
 
   const hideSidebar = () => {
-    const sidebar = document.querySelector(".sidebar");
-    sidebar?.classList.remove("visible");
+    setSidebarVisible(false);
   };
+
+  const sidebarRef = useClickOutside(hideSidebar);
 
   return (
     <nav>
-      <ul className="sidebar">
+      <ul
+        className={`sidebar ${sidebarVisible ? "visible" : ""}`}
+        ref={sidebarRef}
+      >
         <li onClick={hideSidebar}>
-          <a href="#">
+        <a href="#">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               height="24px"
@@ -29,16 +36,24 @@ const Navbar = () => {
           </a>
         </li>
         <li>
-          <Link to="/">Home</Link>
-        </li>
-        <li>
           <Link to="/favorites">Your favorites</Link>
         </li>
       </ul>
 
       <ul className="navigation-links">
         <li>
-          <Link to="/"><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#000000"><path d="M200-280v-280h80v280h-80Zm240 0v-280h80v280h-80ZM80-120v-80h800v80H80Zm600-160v-280h80v280h-80ZM80-640v-80l400-200 400 200v80H80Zm178-80h444-444Zm0 0h444L480-830 258-720Z"/></svg>Museum of Art</Link>
+          <Link to="/">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              height="24px"
+              viewBox="0 -960 960 960"
+              width="24px"
+              fill="#000000"
+            >
+              <path d="M200-280v-280h80v280h-80Zm240 0v-280h80v280h-80ZM80-120v-80h800v80H80Zm600-160v-280h80v280h-80ZM80-640v-80l400-200 400 200v80H80Zm178-80h444-444Zm0 0h444L480-830 258-720Z" />
+            </svg>
+            Museum of Art
+          </Link>
         </li>
         <li className="hideOnMobile">
           <Link to="/favorites">Your favorites</Link>
