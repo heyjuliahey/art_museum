@@ -1,7 +1,7 @@
 # Museum Of Art
 
 ## Demo
-Check out the live demo of the project (https://heyjuliahey.github.io/art_museum/)
+Check out the live demo of the project: 
 
 ## Installation
 
